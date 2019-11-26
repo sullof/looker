@@ -10,6 +10,11 @@ and run something like
 ```
 source .env && node . -n valeriana
 ```
+If you don't have any apiKey, it will work anyway, just for Twitter, Github, etc. In that case you can just run
+```
+node . -n valeriana
+```
+
 To check more than just a `.com`, you can run, for example:
 ```
 source .env && node . -n valeriana -e io,com,me

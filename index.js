@@ -17,13 +17,15 @@ if (!name) {
 }
 
 async function getDns(name, ext) {
-  let res = await superagent
-      .get(`https://domain-availability-api.whoisxmlapi.com/api/v1?apiKey=${process.env.APIKEY}&domainName=${name}.${ext}`)
-      .set('accept', 'application/json')
-  try {
-    if (res.body.DomainInfo.domainAvailability === 'AVAILABLE')
-      console.log(`${name}.${ext} is available`)
-  } catch (e) {
+  if (process.env.APIKEY) {
+    let res = await superagent
+        .get(`https://domain-availability-api.whoisxmlapi.com/api/v1?apiKey=${process.env.APIKEY}&domainName=${name}.${ext}`)
+        .set('accept', 'application/json')
+    try {
+      if (res.body.DomainInfo.domainAvailability === 'AVAILABLE')
+        console.log(`${name}.${ext} is available`)
+    } catch (e) {
+    }
   }
   return false
 }
