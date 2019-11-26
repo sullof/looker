@@ -10,4 +10,9 @@ and run something like
 ```
 source .env && node . -n valeriana
 ```
-Good luck!
+To check more than just a `.com`, you can run, for example:
+```
+source .env && node . -n valeriana -e io,com,me
+```
+
+### Good luck!

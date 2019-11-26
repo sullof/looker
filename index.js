@@ -5,9 +5,12 @@ const program = require('commander')
 program
     .version('0.1.0')
     .option('-n, --name [name]', 'Name')
+    .option('-e, --extensions [extensions]', 'Extensions')
     .parse(process.argv)
 
 const name = program.name
+const extensions = (program.extensions||'com').split(',')
+
 if (!name) {
   console.log('Missed name.')
   process.exit()
@@ -51,13 +54,17 @@ async function getNpm(name) {
 
 async function go() {
 
-  await Promise.all([
-  getDns(name, 'com'),
-  getDns(name, 'io'),
-  getDns(name, 'co'),
-  getTwitter(name),
-  getGitHub(name),
-  getNpm(name)])
+  let promises = [
+    getTwitter(name),
+    getGitHub(name),
+    getNpm(name)
+  ]
+
+  for (let e of extensions) {
+    promises.push(getDns(name, e))
+  }
+
+  await Promise.all(promises)
 
   console.log('Done.')
 
