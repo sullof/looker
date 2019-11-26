@@ -1,18 +1,22 @@
 const superagent = require('superagent')
 const cheerio = require('cheerio')
 
+function commaSeparatedList(value, dummyPrevious) {
+  return value.split(',');
+}
+
 const program = require('commander')
 program
     .version('0.1.0')
-    .option('-n, --name [name]', 'Name')
-    .option('-e, --extensions [extensions]', 'Extensions')
+    .option('-n, --names <names>', 'Names', commaSeparatedList)
+    .option('-e, --extensions <extensions>', 'Extensions', commaSeparatedList)
     .parse(process.argv)
 
-const name = program.name
-const extensions = (program.extensions||'com').split(',')
+const names = program.names
+const extensions = program.extensions || ['com']
 
-if (!name) {
-  console.log('Missed name.')
+if (!names) {
+  console.log('Missed names.')
   process.exit()
 }
 
@@ -54,16 +58,16 @@ async function getNpm(name) {
   }
 }
 
-async function go() {
+async function go(n) {
 
   let promises = [
-    getTwitter(name),
-    getGitHub(name),
-    getNpm(name)
+    getTwitter(n),
+    getGitHub(n),
+    getNpm(n)
   ]
 
   for (let e of extensions) {
-    promises.push(getDns(name, e))
+    promises.push(getDns(n, e))
   }
 
   await Promise.all(promises)
@@ -72,4 +76,9 @@ async function go() {
 
 }
 
-go()
+(async function () {
+  for (let name of names) {
+    console.log(`Checking ${name}:`)
+    await go(name)
+  }
+}())
