@@ -1,0 +1,24 @@
+{
+  "name": "looker",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/sullof/looker.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/sullof/looker/issues"
+  },
+  "homepage": "https://github.com/sullof/looker#readme",
+  "dependencies": {
+    "cheerio": "^1.0.0-rc.3",
+    "commander": "^4.0.1",
+    "superagent": "^5.1.1"
+  }
+}
