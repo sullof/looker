@@ -13,7 +13,7 @@ function commaSeparatedList(value, dummyPrevious) {
 }
 
 async function log(x) {
-  await fs.appendFile(path.resolve(__dirname, './tmp/monitor.log'), `\n${x}`)
+  console.log(new Date()).toISOString(), x)
 }
 
 async function sleep(millis) {
@@ -29,7 +29,7 @@ async function sendMessage(to, body) {
 
     })
   } catch(e) {
-    console.log(e.message)
+    log(e.message)
   }
 }
 
@@ -46,7 +46,7 @@ const extensions = program.extensions || ['com']
 const monitor = program.monitor || process.env.MONITOR
 
 if (!names) {
-  console.log('Missed names.')
+  log('Missed names.')
   process.exit()
 }
 
@@ -57,7 +57,7 @@ async function getDns(name, ext) {
         .set('accept', 'application/json')
     try {
       if (res.body.DomainInfo.domainAvailability === 'AVAILABLE')
-        console.log(`${name}.${ext} is available`)
+        log(`${name}.${ext} is available`)
     } catch (e) {
     }
   }
@@ -71,19 +71,14 @@ let foundNames = []
 async function getTwitter(name) {
   let res = false
   if (monitor) {
-    await log(`Checking @${name}`)
+    log(`Checking @${name}`)
   }
   try {
     await superagent.get(`https://twitter.com/${name}`)
   } catch (e) {
     foundNames.push(name)
     res = true
-    let msg = `@${name} is available`
-    if (monitor) {
-      await log(msg)
-    } else {
-      console.log(msg)
-    }
+    log(`@${name} is available`)
   }
   return res
 }
@@ -92,7 +87,7 @@ async function getGitHub(name) {
   try {
     await superagent.get(`https://github.com/${name}`)
   } catch (e) {
-    console.log(`${name} is available on GitHub`)
+    log(`${name} is available on GitHub`)
   }
 }
 
@@ -100,7 +95,7 @@ async function getNpm(name) {
   try {
     await superagent.get(`https://npmjs.org/package/${name}`)
   } catch (e) {
-    console.log(`${name} is available on Npm`)
+    log(`${name} is available on Npm`)
   }
 }
 
@@ -117,14 +112,12 @@ async function go(n) {
   }
 
   await Promise.all(promises)
-
-  console.log('Done.')
-
+  log('Done.')
 }
 
 async function checkAll() {
   for (let name of names) {
-    console.log(`Checking ${name}:`)
+    log(`Checking ${name}:`)
     await go(name)
   }
 }
@@ -148,6 +141,7 @@ async function checkTNames() {
 }
 
 if (monitor) {
+  log('Starting monitoring')
   checkTNames()
   const pkg = require('./package')
   const http = require('http')
@@ -156,7 +150,6 @@ if (monitor) {
     res.write(`Looker ${pkg.version}`)
     res.end()
   }).listen(43562)
-
 } else {
   checkAll()
 }
