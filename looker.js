@@ -22,16 +22,12 @@ async function sleep(millis) {
 
 async function sendMessage(to, body) {
   try {
-    const [err, responseData] = await client.messages.create({
+    await client.messages.create({
       to: to,
       from: config.twilio.number,
       body: body
 
     })
-    if (!err) {
-      log(responseData.from)
-      log(responseData.body)
-    }
   } catch(e) {
     console.log(e.message)
   }
