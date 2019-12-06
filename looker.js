@@ -134,7 +134,8 @@ async function checkTNames() {
       await sleep(1000 * 10)
     }
     if (names.length === foundNames.length) {
-      process.exit(0)
+      log('Job ended.')
+      break
     }
     await sleep(1000 * 3600)
   }
