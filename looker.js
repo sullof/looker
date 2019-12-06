@@ -13,7 +13,7 @@ function commaSeparatedList(value, dummyPrevious) {
 }
 
 async function log(x) {
-  console.log(new Date()).toISOString(), x)
+  console.log((new Date()).toISOString(), x)
 }
 
 async function sleep(millis) {
