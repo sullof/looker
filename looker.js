@@ -41,8 +41,9 @@ program
     .option('-m, --monitor', 'Monitor')
     .parse(process.argv)
 
-const names = program.names
+const names = program.names || process.env.NAMES.split(',')
 const extensions = program.extensions || ['com']
+const monitor = program.monitor || process.env.MONITOR
 
 if (!names) {
   console.log('Missed names.')
@@ -65,9 +66,11 @@ async function getDns(name, ext) {
 
 let foundNames = []
 
+
+
 async function getTwitter(name) {
   let res = false
-  if (program.monitor) {
+  if (monitor) {
     await log(`Checking @${name}`)
   }
   try {
@@ -76,7 +79,7 @@ async function getTwitter(name) {
     foundNames.push(name)
     res = true
     let msg = `@${name} is available`
-    if (program.monitor) {
+    if (monitor) {
       await log(msg)
     } else {
       console.log(msg)
@@ -144,7 +147,7 @@ async function checkTNames() {
   }
 }
 
-if (program.monitor) {
+if (monitor) {
   checkTNames()
   const pkg = require('./package')
   const http = require('http')
