@@ -12,7 +12,7 @@ function commaSeparatedList(value, dummyPrevious) {
   return value.split(',');
 }
 
-async function log(x) {
+function log(x) {
   console.log((new Date()).toISOString(), x)
 }
 
@@ -128,7 +128,7 @@ async function checkTNames() {
       if (!foundNames.includes(name)) {
         let res = await getTwitter(name)
         if (res) {
-          sendMessage('+14154307073', `WOW, @${name} is available!`)
+          sendMessage('+14154307073', `@${name} is available, take it!`)
         }
       }
       await sleep(1000 * 10)
